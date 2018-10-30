@@ -17,9 +17,9 @@ amp4.admin.config.required: 必須
 amp4.admin.config.back: プラグイン一覧
 amp4.admin.config.save: 登録
 amp4.admin.save.success: 登録しました
-amp4.admin.save.optimize.error: 最適化失敗しました
-amp4.admin.config.not_canonical_optimize_error: 最適化AMPを利用する場合はcanonicalAMPが必要です。
-amp4.admin.config.not_api_url_optimize_error: 最適化AMPを利用する場合は最適化処理URLを設定が必要です。
+amp4.admin.save.optimize.error: 最適化に失敗しました
+amp4.admin.config.not_canonical_optimize_error: 最適化AMPを利用する場合はcanonical AMPの設定が必要です。
+amp4.admin.config.not_api_url_optimize_error: 最適化AMPを利用する場合は最適化処理URLの設定が必要です。
 amp4.admin.page_edit.is_amp.name: 利用する
 amp4.admin.page_edit.is_amp.title: AMP
 
