@@ -1,0 +1,66 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) LOCKON CO.,LTD. All Rights Reserved.
+
+http://www.lockon.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+
+<div class="ec-role">
+    <div class="ec-newsRole">
+        <div class="ec-secHeading">
+            <span class="ec-secHeading__en">{{ 'front.block.news.title__en'|trans }}</span>
+            <span class="ec-secHeading__line"></span>
+            <span class="ec-secHeading__ja">{{ 'front.block.news.title__ja'|trans }}</span>
+        </div>
+        <amp-list class="ec-newsRole__list" width="auto" height="65" layout="fixed-height" src="{{ url('amp_api_news') }}" auto-resize>
+            <template type="amp-mustache">
+                <amp-accordion class="ec-newsRole__news" animate disable-session-states>
+                    {{ "{{#news}}" }}
+                    <section class="ec-newsRole__newsItem">
+                        <header class="ec-newsRole__newsHeader">
+                            <div class="ec-newsRole__newsHeading">
+                                <div class="ec-newsRole__newsDate">{{ "{{date}}" }}</div>
+                                <div class="ec-newsRole__newsColumn">
+                                    <div class="ec-newsRole__newsTitle">{{ "{{title}}" }}</div>
+                                    {{ "{{#description}}" }}
+                                    <div class="ec-newsRole__newsClose">
+															<span class="ec-newsRole__newsCloseBtn">
+																<i class="fas fa-angle-down"></i>
+															</span>
+                                    </div>
+                                    {{ "{{/description}}" }}
+                                    {{ "{{#url}}" }}
+                                    <div class="ec-newsRole__newsClose">
+															<span class="ec-newsRole__newsCloseBtn">
+																<i class="fas fa-angle-down"></i>
+															</span>
+                                    </div>
+                                    {{ "{{/url}}" }}
+                                </div>
+                            </div>
+                        </header>
+                        <div class="ec-newsRole__newsDescription">
+                            {{ "{{#description}}" }}
+                            {{ "{{description}}" }}
+                            {{ "{{/description}}" }}
+                            {{ "{{#url}}" }}
+                            <br>
+                            <a href="{{ "{{url}}" }}">{{ 'front.block.news.see_details'|trans }}</a>
+                            {{ "{{/url}}" }}
+                            {{ "{{#link_method}}" }}
+                            <br>
+                            <a href="{{ "{{url}}" }}" target="_blank">{{ 'front.block.news.see_details'|trans }}</a>
+                            {{ "{{/link_method}}" }}
+                        </div>
+                    </section>
+                    {{ "{{/news}}" }}
+                </amp-accordion>
+            </template>
+            <div overflow class="ec-newsRole__newsItem-overflow">See more</div>
+        </amp-list>
+    </div>
+</div>

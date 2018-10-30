@@ -1,0 +1,42 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) LOCKON CO.,LTD. All Rights Reserved.
+
+http://www.lockon.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends 'default_frame.twig' %}
+
+{% set body_class = 'front_page' %}
+
+{% block script %}
+    <script async custom-element="amp-carousel" src="https://cdn.ampproject.org/v0/amp-carousel-0.1.js"></script>
+    <script async custom-element="amp-accordion" src="https://cdn.ampproject.org/v0/amp-accordion-0.1.js"></script>
+{% endblock %}
+
+{% block main %}
+    <div class="ec-sliderRole">
+        <div class="ec-mainVisual">
+            <amp-carousel class="ec-mainVisual__carousel" id="ec-mainVisual__carousel" width="2260" height="960" layout="responsive" type="slides" [slide]="selectedSlide"
+                          on="slideChange:AMP.setState({selectedSlide: event.index})">
+                <amp-img src="{{ asset('Amp4/assets/img/top/img_hero_pc01.jpg', 'plugin') }}" width="2260" height="960" alt="EC-CUBE" layout="responsive"></amp-img>
+                <amp-img src="{{ asset('Amp4/assets/img/top/img_hero_pc02.jpg', 'plugin') }}" width="2260" height="960" alt="GELATE" layout="responsive"></amp-img>
+                <amp-img src="{{ asset('Amp4/assets/img/top/img_hero_pc03.jpg', 'plugin') }}" width="2260" height="960" alt="ICE CREAM" layout="responsive"></amp-img>
+            </amp-carousel>
+            <ul class="ec-mainVisual__dot-list">
+                <li class="ec-mainVisual__dot-list-item">
+                    <button class="ec-mainVisual__dot-button is-active" on="tap:ec-mainVisual__carousel.goToSlide(index=0), AMP.setState({selectedSlide: 0})" [class]="selectedSlide == 0 ? 'ec-mainVisual__dot-button is-active' : 'ec-mainVisual__dot-button'"></button>
+                </li>
+                <li class="ec-mainVisual__dot-list-item">
+                    <button class="ec-mainVisual__dot-button" on="tap:ec-mainVisual__carousel.goToSlide(index=1), AMP.setState({selectedSlide: 1})" [class]="selectedSlide == 1 ? 'ec-mainVisual__dot-button is-active' : 'ec-mainVisual__dot-button'"></button>
+                </li>
+                <li class="ec-mainVisual__dot-list-item">
+                    <button class="ec-mainVisual__dot-button" on="tap:ec-mainVisual__carousel.goToSlide(index=2), AMP.setState({selectedSlide: 2})" [class]="selectedSlide == 2 ? 'ec-mainVisual__dot-button is-active' : 'ec-mainVisual__dot-button'"></button>
+                </li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}

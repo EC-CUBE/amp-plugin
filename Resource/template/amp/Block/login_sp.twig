@@ -1,0 +1,57 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) LOCKON CO.,LTD. All Rights Reserved.
+
+http://www.lockon.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+
+<div class="ec-headerLinkArea">
+    <amp-list height="276" layout="fixed-height" src="{{ url('amp_api_nav_item') }}">
+        <template type="amp-mustache">
+            <div class="ec-headerLink__list">
+                <a class="ec-headerLink__item" href="{{ url('cart') }}">
+                    <div class="ec-headerLink__icon">
+                        <i class="fas fa-shopping-cart fa-fw"></i>
+                    </div>
+                    <span>{{ 'front.block.login.to_cart'|trans }}</span>
+                </a>
+                {{ "{{#mypage_entry}}" }}
+                    <a class="ec-headerLink__item" href="{{ "{{url}}" }}">
+                        <div class="ec-headerLink__icon">
+                            <i class="fas fa-user fa-fw"></i>
+                        </div>
+                        <span>{{ "{{text}}" }}</span>
+                    </a>
+                {{ "{{/mypage_entry}}" }}
+
+                {{ "{{#favorite}}" }}
+                    <a class="ec-headerLink__item" href="{{ "{{url}}" }}">
+                        <div class="ec-headerLink__icon">
+                            <i class="fas fa-heart fa-fw"></i>
+                        </div>
+                        <span>{{ "{{ text }}" }}</span>
+                    </a>
+                {{ "{{/favorite}}" }}
+
+                {{ "{{#login_logout}}" }}
+                    <a class="ec-headerLink__item" href="{{ "{{url}}" }}">
+                        <div class="ec-headerLink__icon">
+                            <i class="fas fa-lock fa-fw"></i>
+                        </div>
+                        <span>{{ "{{text}}" }}</span>
+                    </a>
+                {{ "{{/login_logout}}" }}
+                <a class="ec-headerLink__item" href="{{ url('homepage') }}">
+                    <div class="ec-headerLink__icon">
+                        <i class="fas fa-home fa-fw"></i>
+                    </div>
+                    <span>{{ 'front.block.login.to_home'|trans }}</span>
+                </a>
+            </div>
+        </template>
+    </amp-list>
+</div>

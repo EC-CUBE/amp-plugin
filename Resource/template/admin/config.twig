@@ -1,0 +1,255 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) LOCKON CO.,LTD. All Rights Reserved.
+
+http://www.lockon.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends '@admin/default_frame.twig' %}
+
+{% set menus = ['store', 'plugin', 'plugin_list'] %}
+
+{% block title %}{{ 'amp4.admin.config.title'|trans }}{% endblock %}
+{% block sub_title %}{{ 'amp4.admin.config.sub_title'|trans }}{% endblock %}
+
+{% form_theme form '@admin/Form/bootstrap_4_horizontal_layout.html.twig' %}
+
+{% block stylesheet %}
+
+{% endblock stylesheet %}
+
+{% block javascript %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.8/ace.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.8/ext-language_tools.js"></script>
+<script>
+    {% if optimize %}
+
+        var progress = new Array();
+        var out = false;
+
+        function ampToOptimize(data, key) {
+            $.ajax({
+                url: "{{ url('amp4_to_optimize') }}",
+                type: 'POST',
+                data: data,
+                dataType: 'json',
+            }).done(function(data) {
+                progress[key] = true;
+            }).fail(function(data) {
+                if (!out) {
+                    //alert(data);
+                    out = true;
+                    changeOptimize("error");
+                }
+            });
+        }
+
+        function changeOptimize(status) {
+            $.ajax({
+                url: "{{ url('amp_change_config_optimize') }}",
+                type: 'POST',
+                data: {"status": status}
+            }).done(function(data) {
+                window.location.href = "{{ url('amp4_admin_config') }}";
+            }).fail(function(data) {
+                window.location.href = "{{ url('amp4_admin_config') }}";
+            });
+        }
+
+        function pro () {
+
+            if (out) {
+                return;
+            }
+
+            setTimeout(function() {
+                var i = 0;
+                for (var p in progress) {
+                    if (progress[p]) {
+                        i++;
+                    }
+                }
+
+                var end = i * 100 / progress.length;
+
+                $(".progress-bar").css('width', end + "%");
+
+                if (i == progress.length) {
+                    changeOptimize("ok");
+                } else {
+                    pro();
+                }
+            }, 200);
+        }
+
+        {% for i, file in files %}
+            progress[{{ i }}] = false;
+            ampToOptimize('{{ file|json_encode|raw }}', {{ i }});
+        {% endfor %}
+
+        pro();
+
+    {% else %}
+
+        $("input[name='config[canonical]']").change(function() {
+            changeOptimizeOption();
+        });
+
+        changeOptimizeOption();
+
+        ace.require('ace/ext/language_tools');
+        var editor = ace.edit('editor');
+        editor.session.setMode('ace/mode/css');
+        editor.setTheme('ace/theme/tomorrow');
+        editor.setValue('{{ form.amp_header_css.vars.value|escape('js') }}');
+        editor.setOptions({
+            enableBasicAutocompletion: true,
+            enableSnippets: true,
+            enableLiveAutocompletion: true,
+            showInvisibles: true
+        });
+
+        function changeOptimizeOption() {
+          var val = $("input[name='config[canonical]']:checked").val();
+            if (val == 1) {
+                $(".optimize").show();
+            } else {
+                $(".optimize").hide();
+                $("#config_optimize").prop('checked', false);
+            }
+        }
+
+
+        function setCssSize() {
+
+            var allSize = sizeof(editor.getValue());
+
+            if (allSize > 50) {
+                $('#editor_size span').css('color', '#c04949');
+            } else {
+                $('#editor_size span').css('color', '');
+            }
+
+            $('#editor_size span').text(allSize);
+        }
+
+        setCssSize();
+
+        $(document).keydown(function(){
+            setCssSize();
+        }).keyup(function() {
+            setCssSize();
+        });
+
+        $('#amp_config_form').on('submit', function(elem) {
+            $('#config_amp_header_css').val(editor.getValue());
+        });
+    {% endif %}
+</script>
+{% endblock %}
+
+{% block main %}
+    <form role="form" method="post" id="amp_config_form">
+
+        {{ form_widget(form._token) }}
+
+        <div class="c-contentsArea__cols">
+            <div class="c-contentsArea__primaryCol">
+                <div class="c-primaryCol">
+                    <div class="card rounded border-0 mb-4">
+                        <div class="card-header">
+                            <span>
+                                {% if optimize %}
+                                    {{ 'amp4.admin.config.header_optimize'|trans }}
+                                {% else %}
+                                    {{ 'amp4.admin.config.header'|trans }}
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div class="card-body">
+
+                            {% if optimize %}
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" style="width:0%"></div>
+                                </div>
+                            {% else %}
+                                <div class="row col-12">
+                                    <div class="col-3">
+                                        <span>{{ 'amp4.admin.config.canonical.name'|trans }}</span>
+                                    </div>
+                                    <div class="col mb-2">
+                                        {{ form_widget(form.canonical) }}
+                                        {{ form_errors(form.canonical) }}
+                                    </div>
+                                </div>
+
+                                <div class="row col-12 optimize">
+                                    <div class="col-3">
+                                        <span>{{ 'amp4.admin.config.optimize.name'|trans }}</span>
+                                    </div>
+                                    <div class="col mb-2">
+                                        {{ form_widget(form.optimize) }}
+                                        {{ form_errors(form.optimize) }}
+                                    </div>
+                                </div>
+
+                                <div class="row col-12 optimize">
+                                    <div class="col-3">
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="col-3"><span>{{ 'amp4.admin.config.amp_twig_api_url.name'|trans }}</span></div>
+                                        <div class="col mb-2">
+                                        {{ form_widget(form.amp_twig_api_url) }}
+                                        {{ form_errors(form.amp_twig_api_url) }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row col-12">
+                                    <div class="col-3">
+                                        <span>{{ 'amp4.admin.config.amp_header_css.name'|trans }}</span>
+                                    </div>
+                                    <div class="col mb-2">
+                                        <div id="editor_size">サイズ:<span></span>KB</div>
+                                        <div id="editor" style="height: 480px" class="form-control{{ has_errors(form.amp_header_css) ? ' is-invalid' }}"></div>
+                                        <div style="display: none">{{ form_widget(form.amp_header_css) }}</div>
+                                        {{ form_errors(form.amp_header_css) }}
+
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if not optimize %}
+            <div class="c-conversionArea">
+                <div class="c-conversionArea__container">
+                    <div class="row justify-content-between align-items-center">
+                        <div class="col-6">
+                            <div class="c-conversionArea__leftBlockItem">
+                                <a style="color: white;" class="c-beseLink" href="{{ url('admin_store_plugin') }}">
+                                    <i class="fa fa-backward" aria-hidden="true"></i>
+                                    <span>{{ 'amp4.admin.config.back'|trans }}</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="row align-items-center justify-content-end">
+                                <div class="col-auto">
+                                    <button class="btn btn-ec-conversion px-5"
+                                            type="submit">{{ 'amp4.admin.config.save'|trans }}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </form>
+{% endblock %}

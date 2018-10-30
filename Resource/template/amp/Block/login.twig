@@ -1,0 +1,43 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) LOCKON CO.,LTD. All Rights Reserved.
+
+http://www.lockon.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+
+<div class="ec-headerNav">
+    <amp-list height="39" layout="fixed-height" src="{{ url('amp_api_nav_item') }}">
+        <template type="amp-mustache">
+            {{ "{{#mypage_entry}}" }}
+            <div class="ec-headerNav__item">
+                <a href="{{ "{{url}}" }}">
+                    <i class="ec-headerNav__itemIcon fas fa-user fa-fw"></i>
+                    <span class="ec-headerNav__itemLink">{{ "{{text}}" }}</span>
+                </a>
+            </div>
+            {{ "{{/mypage_entry}}" }}
+
+            {{ "{{#favorite}}" }}
+            <div class="ec-headerNav__item">
+                <a href="{{ "{{url}}" }}">
+                    <i class="ec-headerNav__itemIcon fas fa-heart fa-fw"></i>
+                    <span class="ec-headerNav__itemLink">{{ "{{text}}" }}</span>
+                </a>
+            </div>
+            {{ "{{/favorite}}" }}
+
+            {{ "{{#login_logout}}" }}
+            <div class="ec-headerNav__item">
+                <a href="{{ "{{url}}" }}">
+                    <i class="ec-headerNav__itemIcon fas fa-lock fa-fw"></i>
+                    <span class="ec-headerNav__itemLink">{{ "{{text}}" }}</span>
+                </a>
+            </div>
+            {{ "{{/login_logout}}" }}
+        </template>
+    </amp-list>
+</div>

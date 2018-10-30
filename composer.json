@@ -1,0 +1,12 @@
+{
+  "name": "ec-cube/Amp4",
+  "version": "0.0.0",
+  "description": "AMP",
+  "type": "eccube-plugin",
+  "require": {
+    "ec-cube/plugin-installer": "~0.0.3"
+  },
+  "extra": {
+    "code": "Amp4"
+  }
+}

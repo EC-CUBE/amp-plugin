@@ -1,0 +1,44 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) LOCKON CO.,LTD. All Rights Reserved.
+
+http://www.lockon.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% form_theme form 'Form/form_div_layout.twig' %}
+
+<div class="ec-headerSearch">
+    <form method="get" class="searchform" action="{{ path('product_list') }}" target="_top">
+        <div class="ec-headerSearch__category">
+            <amp-list class="ec-select ec-select_search" width="auto" height="36" layout="fixed-height" src="{{ url('amp_api_search') }}{{ add_amp_api_parame }}">
+                <template type="amp-mustache">
+                    <select name="category_id" class="category_id">
+                        <option value="">{{ '全ての商品'|trans }}</option>
+                        {{ "{{#search}}" }}
+                        {{ "{{#category}}" }}
+                        <option value="{{ "{{id}}" }}" [selected]="'{{ "{{default.0.category_id}}" }}' == {{ "{{id}}" }}">{{ "{{name}}" }}</option>
+                        {{ "{{/category}}" }}
+                        {{ "{{/search}}" }}
+                    </select>
+                </template>
+            </amp-list>
+        </div>
+        <div class="ec-headerSearch__keyword">
+            <div class="ec-input">
+                <amp-list width="auto" height="34" layout="fixed-height" src="{{ url('amp_api_search') }}{{ add_amp_api_parame }}">
+                    <template type="amp-mustache">
+                        <input type="search" name="name" maxlength="50" class="search-name" placeholder="{{ 'キーワードを入力'|trans }}" [value]="'{{ "{{search.0.default.0.keyword}}" }}'" />
+                        <button class="ec-headerSearch__keywordBtn" type="submit">
+                            <div class="ec-icon">
+                                <amp-img src="{{ asset('Amp4/assets/icon/search-dark.svg', 'plugin') }}" width="22" height="22" alt=""></amp-img>
+                            </div>
+                        </button>
+                    </template>
+                </amp-list>
+            </div>
+        </div>
+    </form>
+</div>

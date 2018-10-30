@@ -1,0 +1,193 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) LOCKON CO.,LTD. All Rights Reserved.
+
+http://www.lockon.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends 'default_frame.twig' %}
+
+{% set body_class = 'product_page' %}
+
+{% block main %}
+    <div class="ec-searchnavRole">
+        <amp-list height="145" layout="fixed-height" src="{{ url("amp_api_products_list") }}{{ strApiJsonParame }}">
+            <template type="amp-mustache">
+                <form name="form1" id="form1" method="get" action="?" target="_top">
+                    <input type="hidden" id="mode" name="mode" />
+                    <input type="hidden" id="category_id" name="category_id" [value]="categoryidResult || '{{ "{{default_category_id}}" }}'" />
+                    <input type="hidden" id="name" name="name" [value]="nameResult || '{{ "{{default_name}}" }}'" />
+                    <input type="hidden" id="pageno" name="pageno" [value]="pagenoResult || '{{ "{{default_pageno}}" }}'" />
+                    <input type="hidden" id="disp_number" name="disp_number" [value]="dispnumberResult || '{{ "{{default_disp_number}}" }}'" />
+                    <input type="hidden" id="orderby" name="orderby" [value]="orderbyResult || '{{ "{{default_orderby}}" }}'" />
+                </form>
+                <div class="ec-searchnavRole__topicpath">
+                    <ol class="ec-topicpath">
+                        <li class="ec-topicpath__item">
+                            <a href="{{ url('product_list') }}">{{ "全て"|trans }}</a>
+                        </li>
+                        {{ "{{#searchCategory}}" }}
+                    <li class="ec-topicpath__divider">|</li>
+                        <li class="ec-topicpath__item" [class]="{{ "{{default_category_id}}" }} == {{ "{{id}}" }} ? 'ec-topicpath__item--active' : 'ec-topicpath__item'">
+                            <a href="http://dev.sundaysys.com:31080/products/list?category_id={{ "{{id}}" }}">{{ "{{name}}" }}</a>
+                        </li>
+                        {{ "{{/searchCategory}}" }}
+                        {{ "{{#default_name}}" }}
+                        <li class="ec-topicpath__item">「{{ "{{default_name}}" }}」{{ "の検索結果"|trans }}</li>
+                        {{ "{{/default_name}}" }}
+                    </ol>
+                </div>
+                <div class="ec-searchnavRole__infos">
+                    <div class="ec-searchnavRole__counter">
+                        <span class="ec-font-bold">{{ "{{products_number}}" }}{{ "件"|trans }}</span>
+                        <span>{{ "の商品が見つかりました"|trans }}</span>
+                    </div>
+                    <div class="ec-searchnavRole__actions">
+                        <div class="ec-select">
+                            <select id="" name="disp_number" class="disp-number form-control" on="change: AMP.setState({dispnumberResult: event.value}), form1.submit">
+                                {{ "{{#disp_number}}" }}
+                                <option value="{{ "{{id}}" }}" [selected]="{{ "{{default_disp_number}}" }} == {{ "{{id}}" }}">{{ "{{name}}" }}</option>
+                                {{ "{{/disp_number}}" }}
+                            </select>
+                            <select id="" name="orderby" class="order-by form-control" on="change: AMP.setState({orderbyResult: event.value}), form1.submit">
+                                {{ "{{#orderby}}" }}
+                                <option value="{{ "{{id}}" }}" [selected]="{{ "{{default_orderby}}" }} == {{ "{{id}}" }}">{{ "{{name}}" }}</option>
+                                {{ "{{/orderby}}" }}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </amp-list>
+    </div>
+    <div class="ec-shelfRole">
+        <amp-state id="productsClassCategories" src="{{ url("amp_api_products_list_class_categories") }}{{ strApiJsonParame }}"></amp-state>
+        <amp-list class="ec-productsList" layout="flex-item" src="{{ url("amp_api_products_list_class_categories") }}{{ strApiJsonParame }}">
+            <template type="amp-mustache">
+                <ul class="ec-shelfGrid">
+                    {{ "{{#products}}" }}
+                    <li class="ec-shelfGrid__item">
+                        <a href="{{ "{{product_url}}" }}">
+                            <p class="ec-shelfGrid__item-image">
+                                <amp-img src="{{ "{{product_image}}" }}" width="550" height="550" alt="{{ "{{product_name}}" }}" layout="responsive"></amp-img>
+                            </p>
+                            <p>{{ "{{product_name}}" }}</p>
+                            <p class="price02-default" [text]="selectResult_{{ "{{product_id}}" }}.price02_inc_tax ? selectResult_{{ "{{product_id}}" }}.price02_inc_tax : '{{ "{{default_price02}}" }}'">{{ "{{default_price02}}" }}</p>
+                        </a>
+                        <form on="submit-success:AMP.setState({cartModal: {visible: true}, successMessage: {msg: event.response.messages}}),cartCount.refresh,cartList.refresh;" name="form{{ "{{product_id}}" }}" id="productForm{{ "{{product_id}}" }}" action-xhr="{{ "{{add_card_url}}" }}" method="post" target="_top">
+                            <div class="ec-productRole__actions">
+                                {{ "{{#classcategory_1.0}}" }}
+                                {{ "{{^classcategory_1.0.classcategory_2}}" }}
+                                <div class="ec-select">
+                                    <select name="classcategory_id1" class="form-control" on="change: AMP.setState({selectResult_{{ "{{product_id}}" }}: productsClassCategories.items[0].products.filter(elm => elm.product_id == {{ "{{product_id}}" }})[0].classcategory_1.filter(elm => elm.id == event.value)[0]})">
+                                        <option value="__unselected">{{ "選択してください"|trans }}</option>
+                                        {{ "{{#classcategory_1}}" }}
+                                        <option value="{{ "{{id}}" }}">{{ "{{name}}" }}</option>
+                                        {{ "{{/classcategory_1}}" }}
+                                    </select>
+                                </div>
+                                {{ "{{/classcategory_1.0.classcategory_2}}" }}
+                                {{ "{{#classcategory_1.0.classcategory_2.0}}" }}
+                                <div class="ec-select">
+                                    <select name="classcategory_id1" class="form-control" on="change: AMP.setState({selectOption_{{ "{{product_id}}" }}: {product_id: '{{ "{{product_id}}" }}', option: productsClassCategories.items[0].products.filter(elm => elm.product_id == {{ "{{product_id}}" }})[0].classcategory_1.filter(elm => elm.id == event.value)[0]}, selectResult_{{ "{{product_id}}" }}: ''})">
+                                        <option value="__unselected">{{ "選択してください"|trans }}</option>
+                                        {{ "{{#classcategory_1}}" }}
+                                        <option value="{{ "{{id}}" }}">{{ "{{name}}" }}</option>
+                                        {{ "{{/classcategory_1}}" }}
+                                    </select>
+                                </div>
+                                <amp-list height="50" layout="fixed-height" [src]="selectOption_{{ "{{product_id}}" }} || '{{ url("amp_api_products_list_class_categories") }}{{ strApiJsonParame }}'" src="{{ url("amp_api_products_list_class_categories") }}{{ strApiJsonParame }}" template="selectOption">
+                                </amp-list>
+                                {{ "{{/classcategory_1.0.classcategory_2.0}}" }}
+                                {{ "{{/classcategory_1.0}}" }}
+                                <div class="ec-numberInput">
+                                    <span>数量</span>
+                                    <input type="number" id="quantity{{ "{{product_id}}" }}" name="quantity" required="required" min="1" maxlength="" class="quantity form-control" value="1" />
+                                </div>
+                            </div>
+                            <input type="hidden" id="product_id{{ "{{product_id}}" }}" name="product_id" value="{{ "{{product_id}}" }}" />
+                            <input type="hidden" id="ProductClass{{ "{{product_id}}" }}" name="ProductClass" [value]="selectResult_{{ "{{product_id}}" }}.product_class_id || '{{ "{{product_class_id}}" }}'" />
+                            <input type="hidden" id="{{ constant('Eccube\\Common\\Constant::TOKEN_NAME') }}{{ "{{product_id}}" }}" name="{{ constant('Eccube\\Common\\Constant::TOKEN_NAME') }}" [value]="selectResult_{{ "{{product_id}}" }}.{{ constant('Eccube\\Common\\Constant::TOKEN_NAME') }} || '{{ "{{" }}{{ constant('Eccube\\Common\\Constant::TOKEN_NAME') }}{{ "}}" }}'" />
+                            <div submit-success template="add_cart_success"></div>
+                            <div submit-error template="add_cart_error"></div>
+                        </form>
+                        <div class="ec-productRole__btn">
+                            {{ "{{^classcategory_1.0}}" }}
+                            <button type="submit" class="ec-blockBtn--action add-cart" data-cartid="{{ "{{product_id}}" }}" on="tap:productForm{{ "{{product_id}}" }}.submit" [text]="productsClassCategories.items[0].products.filter(elm => elm.product_id == {{ "{{product_id}}" }})[0].stock_find ? '{{ "カートに入れる"|trans }}' : '{{ "ただいま品切れ中です"|trans }}'" [disabled]="!productsClassCategories.items[0].products.filter(elm => elm.product_id == {{ "{{product_id}}" }})[0].stock_find" disabled> {{ "カートに入れる"|trans }} </button>
+                            {{ "{{/classcategory_1.0}}" }}
+                            {{ "{{#classcategory_1.0}}" }}
+                            <button type="submit" class="ec-blockBtn--action add-cart" data-cartid="{{ "{{product_id}}" }}" on="tap:productForm{{ "{{product_id}}" }}.submit" [text]="selectResult_{{ "{{product_id}}" }}.stock_find ? '{{ "カートに入れる"|trans }}' : selectResult_{{ "{{product_id}}" }}.stock_find == null ? '{{ "カートに入れる"|trans }}' : '{{ "ただいま品切れ中です"|trans }}'" [disabled]="!selectResult_{{ "{{product_id}}" }}.stock_find" disabled> {{ "カートに入れる"|trans }} </button>
+                            {{ "{{/classcategory_1.0}}" }}
+                        </div>
+                    </li>
+                    {{ "{{/products}}" }}
+                </ul>
+				<div class="ec-modal">
+					<input type="checkbox" id="ec-modal-checkbox" class="checkbox" [class]="cartModal.visible ? 'checkbox checked' : 'checkbox'" [checked]="cartModal.visible ? 'checked' : ''" on="change:AMP.setState({cartModal: {visible: false}})">
+					<div class="ec-modal-overlay">
+						<label for="ec-modal-checkbox" class="ec-modal-overlay-close">
+						</label>
+						<div class="ec-modal-wrap">
+							<label for="ec-modal-checkbox" class="ec-modal-close">
+								<span class="ec-icon">
+									<amp-img src="{{ asset('Amp4/assets/icon/cross-dark.svg', 'plugin') }}" width="20" height="20" alt=""></amp-img>
+								</span>
+							</label>
+							<div id="ec-modal-header" class="text-center" [text]="successMessage.msg">{{ "カートに追加しました。"|trans }}</div>
+							<div class="ec-modal-box">
+								<div class="ec-role">
+									<label for="ec-modal-checkbox" class="ec-inlineBtn--cancel">
+										{{ "お買い物を続ける"|trans }}
+									</label>
+									<a href="{{ url("cart") }}" class="ec-inlineBtn--action">{{ "カートへ進む"|trans }}</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+            </template>
+            <template type="amp-mustache" id="selectOption">
+                <div class="ec-select">
+                    <select name="classcategory_id2" class="form-control" on="change: AMP.setState({selectResult_{{ "{{product_id}}" }}: selectOption_{{ "{{product_id}}" }}.option.classcategory_2.filter(elm => elm.id == event.value)[0]})">
+                        <option value="__unselected">{{ "選択してください"|trans }}</option>
+                        {{ "{{#option.classcategory_2}}" }}
+                        <option value="{{ "{{id}}" }}">{{ "{{name}}" }}</option>
+                        {{ "{{/option.classcategory_2}}" }}
+                    </select>
+                </div>
+            </template>
+			<template type="amp-mustache" id="add_cart_error">
+				<p class="ec-errorMessage">{{ "カートに追加できませんでした。"|trans }}</p>
+			</template>
+        </amp-list>
+    </div>
+    <amp-list height="63" layout="fixed-height" src="{{ url("amp_api_products_list") }}{{ strApiJsonParame }}">
+        <template type="amp-mustache">
+            <div class="ec-pagerRole">
+                {{ "{{#pager.0}}" }}
+                <ul class="ec-pager">
+                    {{ "{{#pager.0.navi_prev}}" }}
+                    <li class="ec-pager__item">
+                        <a href="#" on="tap: AMP.setState({pagenoResult: '{{ "{{number}}" }}'}), form1.submit"> {{ "{{text}}" }} </a>
+                    </li>
+                    {{ "{{/pager.0.navi_prev}}" }}
+                    {{ "{{#pager.0.page}}" }}
+                    <li class="ec-pager__item" [class]="{{ "{{default_pageno}}" }} == {{ "{{number}}" }} ? 'ec-pager__item--active' : 'ec-pager__item'">
+                        <a href="#" on="tap: AMP.setState({pagenoResult: '{{ "{{number}}" }}'}), form1.submit"> {{ "{{text}}" }} </a>
+                    </li>
+                    {{ "{{/pager.0.page}}" }}
+                    {{ "{{#pager.0.navi_next}}" }}
+                    <li class="ec-pager__item">
+                        <a href="#" on="tap: AMP.setState({pagenoResult: '{{ "{{number}}" }}'}), form1.submit"> {{ "{{text}}" }} </a>
+                    </li>
+                    {{ "{{/pager.0.navi_next}}" }}
+                </ul>
+                {{ "{{/pager.0}}" }}
+            </div>
+        </template>
+    </amp-list>
+
+{% endblock %}

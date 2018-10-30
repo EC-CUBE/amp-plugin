@@ -1,0 +1,62 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) LOCKON CO.,LTD. All Rights Reserved.
+
+http://www.lockon.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+
+<div class="ec-cartNaviWrap">
+    <amp-list id="cartCount" height="44" layout="fixed-height" src="{{ url('amp_api_cart_list') }}">
+        <template type="amp-mustache">
+            <div class="ec-cartNavi" role="button" tabindex="0" on="tap:AMP.setState({cartVisible: !cartVisible})">
+                <i class="ec-cartNavi__icon fas fa-shopping-cart">
+                    <span class="ec-cartNavi__badge">{{ "{{total_quantity}}" }}</span>
+                </i>
+                <div class="ec-cartNavi__label">
+                    <div class="ec-cartNavi__price">{{ "{{total_price}}" }}</div>
+                </div>
+            </div>
+        </template>
+    </amp-list>
+	<amp-list id="cartList" layout="flex-item" src="{{ url('amp_api_cart_list') }}" class="ec-cartNaviContents" [class]="cartVisible ? 'ec-cartNaviContents is-active' : 'ec-cartNaviContents'">
+        <template type="amp-mustache">
+            {{ "{{#carts}}" }}
+                <div class="ec-cartNaviIsset" [class]="cartVisible ? 'ec-cartNaviIsset is-active' : 'ec-cartNaviIsset'">
+                    {{ "{{#items}}" }}
+                        <div class="ec-cartNaviIsset__cart">
+                            <div class="ec-cartNaviIsset__cartImage">
+                                <amp-img src="{{ "{{product_image}}" }}" width="550" height="550" alt="{{ "{{product_name}}" }}" layout="responsive"></amp-img>
+                            </div>
+                            <div class="ec-cartNaviIsset__cartContent">
+                                <div class="ec-cartNaviIsset__cartContentTitle">{{ "{{product_name}}" }}
+                                    <div class="ec-font-size-1">
+                                        {{ "{{product_class_name}}" }}
+                                    </div>
+                                </div>
+                                <div class="ec-cartNaviIsset__cartContentPrice">{{ "{{product_price}}" }}
+                                    <div class="ec-cartNaviIsset__cartContentTax">{{ "税込"|trans }}</div>
+                                </div>
+                                <div class="ec-cartNaviIsset__cartContentNumber">{{ "数量"|trans }} {{ "{{product_quantity}}" }}</div>
+                            </div>
+                        </div>
+                    {{ "{{/items}}" }}
+                    <div class="ec-cartNaviIsset__action">
+                        <a class="ec-blockBtn--action" href="{{ url('cart') }}">{{ 'カートへ進む'|trans }}</a>
+                        <a class="ec-blockBtn ec-cartNavi--cancel" on="tap:AMP.setState({cartVisible: !cartVisible})">{{ 'キャンセル'|trans }}</a>
+                    </div>
+                </div>
+            {{ "{{/carts}}" }}
+            {{ "{{^carts}}" }}
+                <div class="ec-cartNaviNull" [class]="cartVisible ? 'ec-cartNaviNull is-active' : 'ec-cartNaviNull'">
+                    <div class="ec-cartNaviNull__message">
+                        <p>{{ '現在カート内に商品はございません。'|trans }}</p>
+                    </div>
+                </div>
+            {{ "{{/carts}}" }}
+        </template>
+	</amp-list>
+</div>
