@@ -81,7 +81,7 @@ class ApiController extends AbstractController
         $categprys = $categoryRepository->getList(null, true);
 
         foreach ($categprys as $category) {
-            $reData['items'][0]['search'][0]['category'][] = ['id' => $category->getId(), 'name' => $category->getNameWithLevel() . $category->getName()];
+            $reData['items'][0]['search'][0]['category'][] = ['id' => $category->getId(), 'name' => $category->getNameWithLevel()];
         }
 
 

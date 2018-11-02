@@ -454,7 +454,7 @@ class TemplateLayoutListener implements EventSubscriberInterface
         $host = $data['host'];
         $port = $data['port'];
 
-        if (('http' == $scheme && 80 == $port) || ('https' == $scheme && 443 == $port)) {
+        if (!$port || ('http' == $scheme && 80 == $port) || ('https' == $scheme && 443 == $port)) {
             return $scheme . "://" . $host;
         }
 
