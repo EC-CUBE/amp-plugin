@@ -613,9 +613,12 @@ class Amp4Event implements EventSubscriberInterface
                 $Block = $event->getData();
                 if ($Block->getId()) {
                     $paths = [
-                        $this->eccubeConfig->get('eccube_theme_app_dir').'/amp',
                         __DIR__ . "/Resource/template/amp",
                     ];
+
+                    if (is_dir($this->eccubeConfig->get('eccube_theme_app_dir').'/amp')) {
+                        $paths = array_merge([$this->eccubeConfig->get('eccube_theme_app_dir').'/amp'], $paths);
+                    }
 
                     try {
                         $loader = new \Twig_Loader_Chain([
