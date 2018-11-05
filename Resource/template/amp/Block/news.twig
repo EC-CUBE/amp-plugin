@@ -16,7 +16,7 @@ file that was distributed with this source code.
             <span class="ec-secHeading__line"></span>
             <span class="ec-secHeading__ja">{{ 'front.block.news.title__ja'|trans }}</span>
         </div>
-        <amp-list class="ec-newsRole__list" width="auto" height="65" layout="fixed-height" src="{{ url('amp_api_news') }}" auto-resize>
+        <amp-list class="ec-newsRole__list" width="auto" height="65" layout="fixed-height" src="{{ url('amp_api_news') }}">
             <template type="amp-mustache">
                 <amp-accordion class="ec-newsRole__news" animate disable-session-states>
                     {{ "{{#news}}" }}
@@ -28,16 +28,16 @@ file that was distributed with this source code.
                                     <div class="ec-newsRole__newsTitle">{{ "{{title}}" }}</div>
                                     {{ "{{#description}}" }}
                                     <div class="ec-newsRole__newsClose">
-															<span class="ec-newsRole__newsCloseBtn">
-																<i class="fas fa-angle-down"></i>
-															</span>
+									    <span class="ec-newsRole__newsCloseBtn">
+										    <i class="fas fa-angle-down"></i>
+										</span>
                                     </div>
                                     {{ "{{/description}}" }}
                                     {{ "{{#url}}" }}
                                     <div class="ec-newsRole__newsClose">
-															<span class="ec-newsRole__newsCloseBtn">
-																<i class="fas fa-angle-down"></i>
-															</span>
+									    <span class="ec-newsRole__newsCloseBtn">
+										    <i class="fas fa-angle-down"></i>
+										</span>
                                     </div>
                                     {{ "{{/url}}" }}
                                 </div>
@@ -45,22 +45,21 @@ file that was distributed with this source code.
                         </header>
                         <div class="ec-newsRole__newsDescription">
                             {{ "{{#description}}" }}
-                            {{ "{{description}}" }}
+								{{ "{{description}}" }}
                             {{ "{{/description}}" }}
                             {{ "{{#url}}" }}
-                            <br>
-                            <a href="{{ "{{url}}" }}">{{ 'front.block.news.see_details'|trans }}</a>
+								<br>
+								<a href="{{ "{{url}}" }}">{{ 'front.block.news.see_details'|trans }}</a>
                             {{ "{{/url}}" }}
                             {{ "{{#link_method}}" }}
-                            <br>
-                            <a href="{{ "{{url}}" }}" target="_blank">{{ 'front.block.news.see_details'|trans }}</a>
+								<br>
+								<a href="{{ "{{url}}" }}" target="_blank">{{ 'front.block.news.see_details'|trans }}</a>
                             {{ "{{/link_method}}" }}
                         </div>
                     </section>
                     {{ "{{/news}}" }}
                 </amp-accordion>
             </template>
-            <div overflow class="ec-newsRole__newsItem-overflow">See more</div>
         </amp-list>
     </div>
 </div>
