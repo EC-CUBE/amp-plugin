@@ -8,6 +8,7 @@ amp4.admin.config.canonical.name: AMP TYPE
 amp4.admin.config.optimize.name: 最適化
 amp4.admin.config.optimize.option.name: 有効
 amp4.admin.config.amp_header_css.name: AMP共通CSS
+amp4.admin.config.amp_manifest.name: AMP manifest js
 
 amp4.admin.config.title: AMP
 amp4.admin.config.sub_title: プラグイン一覧

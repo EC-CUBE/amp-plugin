@@ -311,65 +311,6 @@ workbox.routing.registerRoute(/^(?!.*(.css|.js|.jpg|.jpeg|.png|.gif|.svg|.woff2)
      */
     public function manifestJson(Request $request)
     {
-
-        $homePageName = 'amp_homepage';
-        if ($this->config->isCanonical()) {
-            $homePageName = 'homepage';
-        }
-
-        $assets = $this->get('assets.packages');
-
-        $reData = [
-            'name' => $this->baseInfo->getShopName(),
-            'short_name' => $this->baseInfo->getShopName(),
-            'theme_color' => '#ffffff',
-            'background_color' => '#ffffff',
-            'display' => 'standalone',
-            'start_url' => $this->generateUrl($homePageName, [], UrlGeneratorInterface::ABSOLUTE_URL),
-            'icons' => [
-                [
-                    'src' => $assets->getUrl('Amp4/assets/icon/icons/icon-72x72.png', 'plugin'),
-                    'sizes' => '72x72',
-                    'type' => 'image/png',
-                ],
-                [
-                    'src' => $assets->getUrl('Amp4/assets/icon/icons/icon-96x96.png', 'plugin'),
-                    'sizes' => '96x96',
-                    'type' => 'image/png',
-                ],
-                [
-                    'src' => $assets->getUrl('Amp4/assets/icon/icons/icon-128x128.png', 'plugin'),
-                    'sizes' => '128x128',
-                    'type' => 'image/png',
-                ],
-                [
-                    'src' => $assets->getUrl('Amp4/assets/icon/icons/icon-144x144.png', 'plugin'),
-                    'sizes' => '144x144',
-                    'type' => 'image/png',
-                ],
-                [
-                    'src' => $assets->getUrl('Amp4/assets/icon/icons/icon-152x152.png', 'plugin'),
-                    'sizes' => '152x152',
-                    'type' => 'image/png',
-                ],
-                [
-                    'src' => $assets->getUrl('Amp4/assets/icon/icons/icon-384x384.png', 'plugin'),
-                    'sizes' => '384x384',
-                    'type' => 'image/png',
-                ],
-                [
-                    'src' => $assets->getUrl('Amp4/assets/icon/icons/icon-384x384.png', 'plugin'),
-                    'sizes' => '384x384',
-                    'type' => 'image/png',
-                ],
-                [
-                    'src' => $assets->getUrl('Amp4/assets/icon/icons/icon-512x512.png', 'plugin'),
-                    'sizes' => '512x512',
-                    'type' => 'image/png',
-                ],
-            ],
-        ];
-
-        return $this->json($reData, 200);
+        return new Response($this->config->getAmpManifest(), 200, ['Content-Type' => 'text/javascript']);
     }
 }

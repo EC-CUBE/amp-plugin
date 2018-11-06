@@ -75,6 +75,13 @@ class Config extends \Eccube\Entity\AbstractEntity
     private $amp_header_css;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="amp_manifest", type="text", nullable=true)
+     */
+    private $amp_manifest;
+
+    /**
      * @return int
      */
     public function getId()
@@ -167,6 +174,24 @@ class Config extends \Eccube\Entity\AbstractEntity
     public function setAmpHeaderCss($amp_header_css): Config
     {
         $this->amp_header_css = $amp_header_css;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAmpManifest()
+    {
+        return $this->amp_manifest;
+    }
+
+    /**
+     * @param $amp_manifest
+     * @return $this
+     */
+    public function setAmpManifest($amp_manifest)
+    {
+        $this->amp_manifest = $amp_manifest;
         return $this;
     }
 

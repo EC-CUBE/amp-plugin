@@ -112,6 +112,18 @@ file that was distributed with this source code.
             showInvisibles: true
         });
 
+        ace.require('ace/ext/language_tools');
+        var editor_amp_manifest = ace.edit('editor_amp_manifest');
+        editor_amp_manifest.session.setMode('ace/mode/json');
+        editor_amp_manifest.setTheme('ace/theme/tomorrow');
+        editor_amp_manifest.setValue('{{ form.amp_manifest.vars.value|escape('js') }}');
+        editor_amp_manifest.setOptions({
+            enableBasicAutocompletion: true,
+            enableSnippets: true,
+            enableLiveAutocompletion: true,
+            showInvisibles: true
+        });
+
         function changeOptimizeOption() {
           var val = $("input[name='config[canonical]']:checked").val();
             if (val == 1) {
@@ -146,6 +158,7 @@ file that was distributed with this source code.
 
         $('#amp_config_form').on('submit', function(elem) {
             $('#config_amp_header_css').val(editor.getValue());
+            $('#config_amp_manifest').val(editor_amp_manifest.getValue());
         });
     {% endif %}
 </script>
@@ -217,6 +230,18 @@ file that was distributed with this source code.
                                         <div id="editor" style="height: 480px" class="form-control{{ has_errors(form.amp_header_css) ? ' is-invalid' }}"></div>
                                         <div style="display: none">{{ form_widget(form.amp_header_css) }}</div>
                                         {{ form_errors(form.amp_header_css) }}
+
+                                    </div>
+                                </div>
+
+                                <div class="row col-12">
+                                    <div class="col-3">
+                                        <span>{{ 'amp4.admin.config.amp_manifest.name'|trans }}</span>
+                                    </div>
+                                    <div class="col mb-2">
+                                        <div id="editor_amp_manifest" style="height: 480px" class="form-control{{ has_errors(form.amp_manifest) ? ' is-invalid' }}"></div>
+                                        <div style="display: none">{{ form_widget(form.amp_manifest) }}</div>
+                                        {{ form_errors(form.amp_manifest) }}
 
                                     </div>
                                 </div>

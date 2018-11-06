@@ -53,6 +53,10 @@ class ConfigType extends AbstractType
                 'label' => trans('amp4.admin.config.amp_header_css.name'),
                 'required' => false,
             ])
+            ->add('amp_manifest', TextareaType::class, [
+                'label' => trans('amp4.admin.config.amp_manifest.name'),
+                'required' => false,
+            ])
             ->addEventListener(FormEvents::POST_SUBMIT, function ($event) {
                 $form = $event->getForm();
                 $canonical = $form['canonical']->getData();
