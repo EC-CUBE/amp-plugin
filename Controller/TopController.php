@@ -64,7 +64,7 @@ class TopController extends \Eccube\Controller\TopController
 <title>installing Service Woker</title>
 <script>
 	if("serviceWorker" in navigator) {
-		navigator.serviceWorker.register("' . $this->get('assets.packages')->getUrl('Amp4/assets/js/sw.js', 'plugin') . '")
+		navigator.serviceWorker.register("' . $this->generateUrl('amp_sw_js') . '")
 			.then(function(reg){
 			console.log(\'SW scope: \', reg.scope);
 		}) .catch(function(err) {
@@ -97,6 +97,8 @@ class TopController extends \Eccube\Controller\TopController
  */
 
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.2/workbox-sw.js");
+
+workbox.navigationPreload.enable();
 
 workbox.core.setCacheNameDetails({prefix: "ec-cube"});
 
@@ -301,8 +303,9 @@ self.__precacheManifest = [
 workbox.precaching.suppressWarnings();
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-workbox.routing.registerRoute(/.jpg|.jpeg|.png|.gif|.svg/, workbox.strategies.cacheFirst({ "cacheName":"cache-api", plugins: [new workbox.expiration.Plugin({"maxEntries":100,"maxAgeSeconds":259200,"purgeOnQuotaError":false}), new workbox.cacheableResponse.Plugin({"statuses":[0,200]})] }), \'GET\');
+workbox.routing.registerRoute(/.jpg|.jpeg|.png|.gif|.svg/, workbox.strategies.cacheFirst({ "cacheName":"images", plugins: [new workbox.expiration.Plugin({"maxEntries":100,"maxAgeSeconds":259200,"purgeOnQuotaError":false}), new workbox.cacheableResponse.Plugin({"statuses":[0,200]})] }), \'GET\');
 workbox.routing.registerRoute(/^(?!.*(.css|.js|.jpg|.jpeg|.png|.gif|.svg|.woff2)).*$/, workbox.strategies.networkFirst({ "cacheName":"root", plugins: [new workbox.expiration.Plugin({"maxEntries":1,"maxAgeSeconds":864000,"purgeOnQuotaError":false}), new workbox.cacheableResponse.Plugin({"statuses":[0,200]})] }), \'GET\');
+workbox.routing.registerRoute(/https:\/\/cdn.ampproject.org\/.*/, workbox.strategies.cacheFirst({ "cacheName":"resources", plugins: [new workbox.expiration.Plugin({"maxEntries":100,"maxAgeSeconds":259200,"purgeOnQuotaError":false}), new workbox.cacheableResponse.Plugin({"statuses":[0,200]})] }), \'GET\');
 ', 200, ['Content-Type' => 'application/javascript']);
     }
 

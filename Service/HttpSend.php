@@ -89,12 +89,26 @@ class HttpSend
      */
     public function toEncodeTwig($html)
     {
-        $p = '/<\?php .*\?>|{#.*#}|{%.*%}|{{[\w\s]*".*".*}}|{{[\w\s]*\'.*\'.*}}|{{.*}}/iU';
+        $p = '/<\!--amp_tag_start-->{%.*%}<\!--amp_tag_end-->|<\!--amp_tag_start-->{{.*}}<\!--amp_tag_end-->/iU';
 
         preg_match_all($p, $html, $matches);
 
         $reKey = [];
         $limit = 1;
+
+        if (count($matches)) {
+
+            foreach ($matches[0] as $k => $value) {
+                $newKey = '<meta name="twig_tag" content="' . md5($k . '-' . $value) . '">';
+                $reKey[$newKey] = $value;
+                $html = str_replace($value, $newKey, $html, $limit);
+            }
+        }
+
+
+        $p = '/<\?php .*\?>|{#.*#}|{%.*%}|{{[\w\s]*".*".*}}|{{[\w\s]*\'.*\'.*}}|{{.*}}/iU';
+
+        preg_match_all($p, $html, $matches);
 
         if (count($matches)) {
 

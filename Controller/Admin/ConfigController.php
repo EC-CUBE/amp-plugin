@@ -4,6 +4,7 @@
 namespace Plugin\Amp4\Controller\Admin;
 
 use Eccube\Controller\AbstractController;
+use Eccube\Util\CacheUtil;
 use Eccube\Util\StringUtil;
 use Plugin\Amp4\Form\Type\Admin\ConfigType;
 use Plugin\Amp4\Repository\ConfigRepository;
@@ -71,7 +72,7 @@ class ConfigController extends AbstractController
 
             $err = $this->httpSend->checkTiwg($code);
             if ($err) {
-                return $this->json(['status' => 'error', 'mess' => $err], 500);
+                return $this->json(['status' => 'error', 'mess' => $err, 'code' => $code], 500);
             }
 
             $this->filesystem->dumpFile($savePath, $code);
@@ -83,15 +84,18 @@ class ConfigController extends AbstractController
     /**
      * @param Request $request
      * @Route("/%eccube_admin_route%/amp4/amp_change_config_optimize", name="amp_change_config_optimize", methods={"POST"})
-     * @return mixed
+     * @param CacheUtil $cacheUtil
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function changeConfigOptimize(Request $request)
+    public function changeConfigOptimize(Request $request, CacheUtil $cacheUtil)
     {
         $status = $request->get('status');
 
         $config = $this->configRepository->get();
 
         if ($status == 'ok') {
+
+            $cacheUtil->clearCache();
 
             $config->setOptimize(true);
             $this->addSuccess('amp4.admin.save.success', 'admin');
