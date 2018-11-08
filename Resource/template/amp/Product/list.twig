@@ -32,7 +32,7 @@ file that was distributed with this source code.
                         {{ "{{#searchCategory}}" }}
                     <li class="ec-topicpath__divider">|</li>
                         <li class="ec-topicpath__item" [class]="{{ "{{default_category_id}}" }} == {{ "{{id}}" }} ? 'ec-topicpath__item--active' : 'ec-topicpath__item'">
-                            <a href="http://dev.sundaysys.com:31080/products/list?category_id={{ "{{id}}" }}">{{ "{{name}}" }}</a>
+                            <a href="{{ url('product_list') }}?category_id={{ "{{id}}" }}">{{ "{{name}}" }}</a>
                         </li>
                         {{ "{{/searchCategory}}" }}
                         {{ "{{#default_name}}" }}
