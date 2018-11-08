@@ -28,16 +28,12 @@ file that was distributed with this source code.
         </div>
         <div class="ec-headerSearch__keyword">
             <div class="ec-input">
-                <amp-list width="auto" height="34" layout="fixed-height" src="{{ url('amp_api_search') }}{{ add_amp_api_parame }}">
-                    <template type="amp-mustache">
-                        <input type="search" name="name" maxlength="50" class="search-name" placeholder="{{ 'キーワードを入力'|trans }}" [value]="'{{ "{{search.0.default.0.keyword}}" }}'" />
-                        <button class="ec-headerSearch__keywordBtn" type="submit">
-                            <div class="ec-icon">
-                                <amp-img src="{{ asset('Amp4/assets/icon/search-dark.svg', 'plugin') }}" width="22" height="22" alt=""></amp-img>
-                            </div>
-                        </button>
-                    </template>
-                </amp-list>
+				<input type="search" name="name" maxlength="50" class="search-name" placeholder="{{ 'キーワードを入力'|trans }}" value="" />
+				<button class="ec-headerSearch__keywordBtn" type="submit">
+					<div class="ec-icon">
+						<amp-img src="{{ asset('Amp4/assets/icon/search-dark.svg', 'plugin') }}" width="22" height="22" alt=""></amp-img>
+					</div>
+				</button>
             </div>
         </div>
     </form>
