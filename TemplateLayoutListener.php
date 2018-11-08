@@ -286,11 +286,11 @@ class TemplateLayoutListener implements EventSubscriberInterface
             $Page->setMetaTags($tag);
         }
 
-        if ($this->isAmpRequest() || $isAddCanonical) {
+        if ($Page->isAmp() && ($Config->isCanonical() || $this->isAmpRequest())) {
             $tag = $Page->getMetaTags();
 
             $tag .= "<style amp-custom>"
-                . $this->configRepository->get()->getAmpHeaderCss()
+                . $Config->getAmpHeaderCss()
                 . $Page->getAmpCss()
                 . "</style>";
 
