@@ -3,7 +3,7 @@
 /*
  * This file is part of EC-CUBE
  *
- * copyright (c) EC-CUBE CO.,LTD. all rights reserved.
+ * Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
  *
  * https://www.ec-cube.co.jp/
  *
