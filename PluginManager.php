@@ -14,19 +14,15 @@
 namespace Plugin\Amp4;
 
 use Doctrine\ORM\EntityManager;
+use Eccube\Entity\Block;
 use Eccube\Entity\BlockPosition;
 use Eccube\Entity\Layout;
 use Eccube\Entity\Master\DeviceType;
 use Eccube\Entity\Page;
 use Eccube\Entity\PageLayout;
 use Eccube\Plugin\AbstractPluginManager;
-use Eccube\Repository\BlockRepository;
-use Eccube\Repository\LayoutRepository;
-use Eccube\Repository\Master\DeviceTypeRepository;
-use Eccube\Repository\PageLayoutRepository;
-use Eccube\Repository\PageRepository;
+use Plugin\Amp4\Entity\Config;
 use Plugin\Amp4\Entity\Master\DeviceTypeTrait;
-use Plugin\Amp4\Repository\ConfigRepository;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -48,9 +44,9 @@ class PluginManager extends AbstractPluginManager
         $entityManager = $container->get('doctrine.orm.entity_manager');
 
         /** @var \Eccube\Repository\Master\DeviceTypeRepository $deviceTypeRepository */
-        $deviceTypeRepository = $container->get(DeviceTypeRepository::class);
+        $deviceTypeRepository = $entityManager->getRepository(DeviceType::class);
         /** @var \Eccube\Repository\BlockRepository $blockRepository */
-        $blockRepository = $container->get(BlockRepository::class);
+        $blockRepository = $entityManager->getRepository(Block::class);
 
         $ampDevice = $deviceTypeRepository->find(DeviceTypeTrait::$DEVICE_TYPE_AMP);
         if (!$ampDevice) {
@@ -123,7 +119,7 @@ class PluginManager extends AbstractPluginManager
             }
 
             /** @var $Config \Plugin\Amp4\Entity\Config */
-            $Config = $container->get(ConfigRepository::class)->get();
+            $Config = $entityManager->getRepository(Config::class)->get();
             $Config->setAmpHeaderCss(file_get_contents(__DIR__ . '/Resource/amp_css/header.css'));
             $Config->setOptimize(false);
             $Config->setCanonical(false);
@@ -131,9 +127,9 @@ class PluginManager extends AbstractPluginManager
 
             $entityManager->persist($Config);
 
-            $ampPages = $container->get(PageRepository::class)->findBy(['url' => ['homepage', 'product_list', 'product_detail']]);
+            $ampPages = $entityManager->getRepository(Page::class)->findBy(['url' => ['homepage', 'product_list', 'product_detail']]);
 
-            $ampPageLayout = $container->get(PageLayoutRepository::class)->findOneBy([], ['sort_no' => 'DESC']);
+            $ampPageLayout = $entityManager->getRepository(PageLayout::class)->findOneBy([], ['sort_no' => 'DESC']);
             $sortNo = $ampPageLayout ? $ampPageLayout->getSortNo() + 1 : 1;
 
             /** @var $ampPage Page */
@@ -183,12 +179,12 @@ class PluginManager extends AbstractPluginManager
     {
         /** @var $entityManager EntityManager */
         $entityManager = $container->get('doctrine.orm.entity_manager');
-        $ampDevice = $container->get(DeviceTypeRepository::class)->find(DeviceTypeTrait::$DEVICE_TYPE_AMP);
+        $ampDevice = $entityManager->getRepository(DeviceType::class)->find(DeviceTypeTrait::$DEVICE_TYPE_AMP);
 
         if ($ampDevice) {
 
-            $ampLayouts = $container->get(LayoutRepository::class)->findBy(['DeviceType' => $ampDevice]);
-            $ampPageLayouts = $container->get(PageLayoutRepository::class)->findBy(['Layout' => $ampLayouts]);
+            $ampLayouts = $entityManager->getRepository(Layout::class)->findBy(['DeviceType' => $ampDevice]);
+            $ampPageLayouts = $entityManager->getRepository(PageLayout::class)->findBy(['Layout' => $ampLayouts]);
 
             /** @var $ampPageLayout PageLayout */
             foreach ($ampPageLayouts as $ampPageLayout) {

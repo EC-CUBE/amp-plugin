@@ -16,6 +16,7 @@ namespace Plugin\Amp4\Controller;
 use Eccube\Controller\AbstractController;
 use Eccube\Entity\Product;
 use Symfony\Component\HttpFoundation\Request;
+use Knp\Component\Pager\PaginatorInterface;
 use Knp\Component\Pager\Paginator;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -37,7 +38,7 @@ class ProductController extends \Eccube\Controller\ProductController
      * @param Paginator $paginator
      * @return array|void
      */
-    public function index(Request $request, Paginator $paginator)
+    public function index(Request $request, PaginatorInterface $paginator)
     {
         $reData = parent::index($request, $paginator);
 
