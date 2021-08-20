@@ -51,7 +51,7 @@ class ConfigRepository extends AbstractRepository
      */
     public function __construct(RegistryInterface $registry, BaseInfoRepository $baseInfoRepository, ContainerInterface $container, Packages $assetPackages)
     {
-        $this->baseInfo = $baseInfoRepository;
+        $this->baseInfoRepository = $baseInfoRepository;
         $this->container = $container;
         $this->assetPackages = $assetPackages;
         parent::__construct($registry, Config::class);
