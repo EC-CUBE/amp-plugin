@@ -20,7 +20,8 @@ use Eccube\Twig\Extension\EccubeExtension;
 use Eccube\Twig\Extension\IntlExtension;
 use Eccube\Util\StringUtil;
 use Knp\Bundle\PaginatorBundle\Pagination\SlidingPagination;
-use Knp\Component\Pager\Paginator;
+use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -39,9 +40,13 @@ class ApiController extends AbstractController
      */
     protected $BaseInfo;
 
-    public function __construct(BaseInfoRepository $baseInfoRepository)
+    /** @var Packages */
+    protected $assetPackages;
+
+    public function __construct(BaseInfoRepository $baseInfoRepository, Packages $assetPackages)
     {
         $this->BaseInfo = $baseInfoRepository->get();
+        $this->assetPackages = $assetPackages;
     }
 
     /**
@@ -141,14 +146,14 @@ class ApiController extends AbstractController
      * @Route("/amp-api/products/list/class_categories.json", name="amp_api_products_list_class_categories")
      *
      * @param Request $request
-     * @param Paginator $paginator
+     * @param PaginatorInterface $paginator
      * @param ProductRepository $productRepository
      * @param ProductListMaxRepository $productListMaxRepository
      * @param EccubeExtension $eccubeExtension
      * @param CsrfTokenManagerInterface $tokenManager
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function productsClassCategories(Request $request, Paginator $paginator,
+    public function productsClassCategories(Request $request, PaginatorInterface $paginator,
                                             ProductRepository $productRepository,
                                             ProductListMaxRepository $productListMaxRepository,
                                             EccubeExtension $eccubeExtension,
@@ -219,7 +224,7 @@ class ApiController extends AbstractController
                             'product_url' => $this->generateUrl('product_detail', ['id' => $ProductsAndClassCategorie->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
                             'add_card_url' => $this->generateUrl('product_add_cart', ['id' => $ProductsAndClassCategorie->getId(), 'type' => 'amp'], UrlGeneratorInterface::ABSOLUTE_URL),
                             'product_name' => $ProductsAndClassCategorie->getName(),
-                            'product_image' => $request->getSchemeAndHttpHost() . $this->get('assets.packages')->getUrl($eccubeExtension->getNoImageProduct($ProductsAndClassCategorie->getMainListImage()), 'save_image'),
+                            'product_image' => $request->getSchemeAndHttpHost() . $this->assetPackages->getUrl($eccubeExtension->getNoImageProduct($ProductsAndClassCategorie->getMainListImage()), 'save_image'),
                         ];
 
                         if ($ProductsAndClassCategorie->hasProductClass()) {
@@ -249,13 +254,13 @@ class ApiController extends AbstractController
      * @Route("/amp-api/products/list.json", name="amp_api_products_list")
      *
      * @param Request $request
-     * @param Paginator $paginator
+     * @param PaginatorInterface $paginator
      * @param ProductRepository $productRepository
      * @param ProductListMaxRepository $productListMaxRepository
      * @param ProductListOrderByRepository $productListOrderByRepository
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function productList(Request $request, Paginator $paginator,
+    public function productList(Request $request, PaginatorInterface $paginator,
                                 ProductRepository $productRepository,
                                 ProductListMaxRepository $productListMaxRepository,
                                 ProductListOrderByRepository $productListOrderByRepository)
@@ -626,7 +631,7 @@ class ApiController extends AbstractController
                     $reData['items'][0]['carts'][0]['items'][] = [
                         'product_name' => $product->getName(),
                         'product_image' =>  $request->getSchemeAndHttpHost() .
-                            $this->get('assets.packages')->getUrl($eccubeExtension->getNoImageProduct($product->getMainListImage()), 'save_image'),
+                            $this->assetPackages->getUrl($eccubeExtension->getNoImageProduct($product->getMainListImage()), 'save_image'),
                         'product_class_name' => $productClassName,
                         'product_price' => sprintf("￥%s", number_format($item->getPriceIncTax())),
                         'product_quantity' => number_format($item->getQuantity()),

@@ -3,6 +3,7 @@
 namespace Plugin\Amp4;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Eccube\Common\EccubeConfig;
 use Eccube\Entity\Layout;
@@ -119,7 +120,7 @@ class Amp4Event implements EventSubscriberInterface
                                 LayoutRepository $layoutRepository,
                                 ConfigRepository $configRepository,
                                 PageRepository $pageRepository,
-                                EntityManager $entityManager,
+                                EntityManagerInterface $entityManager,
                                 EccubeConfig $eccubeConfig,
                                 Environment $twig,
                                 Filesystem $filesystem,

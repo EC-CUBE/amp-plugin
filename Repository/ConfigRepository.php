@@ -17,6 +17,7 @@ use Eccube\Repository\AbstractRepository;
 use Eccube\Repository\BaseInfoRepository;
 use Plugin\Amp4\Entity\Config;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\Asset\Packages;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -29,14 +30,17 @@ class ConfigRepository extends AbstractRepository
     protected $config;
 
     /**
-     * @var \Eccube\Entity\BaseInfo
+     * @var BaseInfoRepository;
      */
-    protected $baseInfo;
+    protected $baseInfoRepository;
 
     /**
      * @var ContainerInterface
      */
     protected $container;
+
+    /** @var Packages */
+    protected $assetPackages;
 
     /**
      * ConfigRepository constructor.
@@ -45,10 +49,11 @@ class ConfigRepository extends AbstractRepository
      * @param ContainerInterface $container
      * @throws \Exception
      */
-    public function __construct(RegistryInterface $registry, BaseInfoRepository $baseInfoRepository, ContainerInterface $container)
+    public function __construct(RegistryInterface $registry, BaseInfoRepository $baseInfoRepository, ContainerInterface $container, Packages $assetPackages)
     {
-        $this->baseInfo = $baseInfoRepository->get();
+        $this->baseInfoRepository = $baseInfoRepository;
         $this->container = $container;
+        $this->assetPackages = $assetPackages;
         parent::__construct($registry, Config::class);
     }
 
@@ -77,11 +82,11 @@ class ConfigRepository extends AbstractRepository
             $start_url .= "amp/";
 
 
-            $assets = $this->container->get('assets.packages');
+            $assets = $this->assetPackages;
 
             $reData = [
-                'name' => $this->baseInfo->getShopName(),
-                'short_name' => $this->baseInfo->getShopName(),
+                'name' => $this->baseInfoRepository->get()->getShopName(),
+                'short_name' => $this->baseInfoRepository->get()->getShopName(),
                 'theme_color' => '#ffffff',
                 'background_color' => '#ffffff',
                 'display' => 'standalone',
